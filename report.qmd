@@ -1,0 +1,190 @@
+---
+title: "Project 2 – Perceptron Classifier"
+author: "Team Members: Isabella, Hudson, Jacob, Hayat"
+format: pdf
+---
+
+# Student Certification
+
+**Team Member 1**
+
+- Print Name: Isabella Darko
+- Date: 9/30/2025
+- I have contributed by doing the following: I did part 1 data set B and set up the pdf where we put everything
+- Signed: $\mathcal{Isabella\ Darko}$
+
+**Team Member 2**
+
+- Print Name:
+- Date:
+- I have contributed by doing the following:
+- Signed:
+
+**Team Member 3**
+
+- Print Name:
+- Date:
+- I have contributed by doing the following:
+- Signed:
+
+**Team Member 4**
+
+- Print Name:
+- Date:
+- I have contributed by doing the following:
+- Signed:
+
+# Part 1 – Dataset Experiments
+
+## Dataset A
+
+place holder
+
+## Dataset B
+
+### Hard Unipolar Activation
+
+#### Training Split 75/25
+
+- _Training Plot:_ `B_train_hard_75.png`
+- _Testing Plot:_ `B_test_hard_25.png`
+- Training Total Error: [value]
+
+**Confusion Matrix (Testing Data)**
+
+|                 | Predicted Positive | Predicted Negative |
+| --------------- | ------------------ | ------------------ |
+| Actual Positive | TP = [ ]           | FN = [ ]           |
+| Actual Negative | FP = [ ]           | TN = [ ]           |
+
+**Rates**
+
+- Accuracy: [ ]
+- True Positive Rate (Recall): [ ]
+- False Positive Rate: [ ]
+- Precision: [ ]
+- F1 Score: [ ]
+
+---
+
+#### Training Split 25/75
+
+- _Training Plot:_ `B_train_hard_25.png`
+- _Testing Plot:_ `B_test_hard_75.png`
+- Training Total Error: [value]
+
+**Confusion Matrix (Testing Data)**
+
+|                 | Predicted Positive | Predicted Negative |
+| --------------- | ------------------ | ------------------ |
+| Actual Positive | TP = [ ]           | FN = [ ]           |
+| Actual Negative | FP = [ ]           | TN = [ ]           |
+
+**Rates**
+
+- Accuracy: [ ]
+- True Positive Rate (Recall): [ ]
+- False Positive Rate: [ ]
+- Precision: [ ]
+- F1 Score: [ ]
+
+---
+
+#### Comparison of 75/25 vs 25/75
+
+- **a. Are error rates different, and if so, why?**
+
+- **b. What is the effect of different datasets and the effect of different training/testing distributions of TEs on the accuracy, confusion matrices, and rates?**
+
+- **c. When would you go with step 1 (75/25) and when with step 2 (25/75)?**
+
+- **d. Comment and discuss.**
+
+### Soft Unipolar Activation
+
+#### Training Split 75/25
+
+- _Training Plot:_ `B_train_hard_75.png`
+- _Testing Plot:_ `B_test_hard_25.png`
+- Training Total Error: [value]
+
+**Confusion Matrix (Testing Data)**
+
+|                 | Predicted Positive | Predicted Negative |
+| --------------- | ------------------ | ------------------ |
+| Actual Positive | TP = [ ]           | FN = [ ]           |
+| Actual Negative | FP = [ ]           | TN = [ ]           |
+
+**Rates**
+
+- Accuracy: [ ]
+- True Positive Rate (Recall): [ ]
+- False Positive Rate: [ ]
+- Precision: [ ]
+- F1 Score: [ ]
+
+---
+
+#### Training Split 25/75
+
+- _Training Plot:_ `B_train_hard_25.png`
+- _Testing Plot:_ `B_test_hard_75.png`
+- Training Total Error: [value]
+
+**Confusion Matrix (Testing Data)**
+
+|                 | Predicted Positive | Predicted Negative |
+| --------------- | ------------------ | ------------------ |
+| Actual Positive | TP = [ ]           | FN = [ ]           |
+| Actual Negative | FP = [ ]           | TN = [ ]           |
+
+**Rates**
+
+- Accuracy: [ ]
+- True Positive Rate (Recall): [ ]
+- False Positive Rate: [ ]
+- Precision: [ ]
+- F1 Score: [ ]
+
+---
+
+#### Comparison of 75/25 vs 25/75
+
+- **a. Are error rates different, and if so, why?**
+
+- **b. What is the effect of different datasets and the effect of different training/testing distributions of TEs on the accuracy, confusion matrices, and rates?**
+
+- **c. When would you go with step 1 (75/25) and when with step 2 (25/75)?**
+
+- **d. Comment and discuss.**
+
+## Dataset C
+
+### Hard Unipolar Activation
+
+_(Same structure as Dataset A and B)_
+
+### Soft Unipolar Activation
+
+_(Same structure as Dataset A and B)_
+
+---
+
+# Part 2 – Soft vs Hard Comparison
+
+- Placeholder text.
+
+---
+
+# Extra Credit
+
+- Placeholder text.
+
+---
+
+# Conclusion
+
+- Key takeaways from Dataset A, B, and C experiments.
+- Overall differences between hard vs soft unipolar activation.
+- When to prefer larger training split vs smaller one.
+- Might not need this section can include it if we want to.
