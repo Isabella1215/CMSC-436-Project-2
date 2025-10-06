@@ -1,4 +1,4 @@
-### Dataset C â€“ Hard Activation (75/25 Split)
+### Dataset C – Hard Activation (75/25 Split)
 
 **Confusion Matrix (Testing Data)**
 
@@ -15,4 +15,4 @@
 - Precision: 0.5000
 - F1 Score: 0.6658
 
-_Generated on 2025-10-06 09:08:18_
+_Generated on 2025-10-06 15:58:31_

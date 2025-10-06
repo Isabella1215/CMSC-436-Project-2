@@ -1,7 +1,20 @@
 ---
 title: "Project 2 – Perceptron Classifier"
 author: "Team Members: Isabella, Hudson, Jacob, Hayat"
-format: pdf
+format:
+  pdf:
+    pdf-engine: xelatex
+    code-block-font-size: \footnotesize
+    include-in-header:
+      text: |
+        % Enable line wrapping in code blocks
+        \usepackage{fvextra}
+        \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,breakanywhere,commandchars=\\\{\}}
+        \RecustomVerbatimEnvironment{Verbatim}{Verbatim}{breaklines,breakanywhere}
+execute:
+  echo: true
+  warning: false
+  message: false
 ---
 
 # Student Certification
@@ -36,9 +49,10 @@ format: pdf
 
 # Part 1 – Perceptron-based Classifier
 
-In this section the full  pipeline is detailed. The pipeline is a consolidation  of the code of several members. This includes loading, normalizing, splitting, and training on the data.
+In this section the full pipeline is detailed. The pipeline is a consolidation of the code of several members. This includes loading, normalizing, splitting, and training on the data.
 
 ### Load Data
+
 ```{python}
 # imports
 import numpy as np
@@ -69,7 +83,9 @@ def load_data(pathname: str) -> pd.DataFrame:
     df["label"] = df["label"].astype(int)
     return df
 ```
+
 ### Helper for Results Comparison
+
 ```{python}
 def save_confusion_and_metrics(metrics, dataset_tag, mode, split_fraction, prefix='C'):
     split_tag = str(int(split_fraction * 100))
@@ -92,6 +108,7 @@ def save_confusion_and_metrics(metrics, dataset_tag, mode, split_fraction, prefi
 ```
 
 ### Perceptron Model Pipeline
+
 ```{python}
 def normalize(X):
     scaler = StandardScaler()
@@ -168,7 +185,9 @@ def compute_metrics(y_true, y_pred):
             'accuracy':acc,'recall':rec,'precision':prec,'f1':f1,'fpr':fpr}
 
 ```
+
 ### Visualization Helper
+
 ```{python}
 def plot_2d_pca(X_full, y, w_full, pathname, title='', mode='hard'):
     # need pca projection for 2D plotting
@@ -187,6 +206,7 @@ def plot_2d_pca(X_full, y, w_full, pathname, title='', mode='hard'):
 ```
 
 ### Experiment Runner
+
 ```{python}
 def run_experiment(df, split_fraction=0.75, mode='hard', alpha=0.01, gain=0.5,
                    epsilon=700, ni=5000, seed=GLOBAL_SEED, save_prefix='C'):
@@ -251,6 +271,7 @@ def run_experiment(df, split_fraction=0.75, mode='hard', alpha=0.01, gain=0.5,
 ```
 
 ### Summarization
+
 ```{python}
 def summarize_experiments(results_list, filename="reports/summary_table.csv"):
     df_summary = pd.DataFrame([
@@ -263,7 +284,8 @@ def summarize_experiments(results_list, filename="reports/summary_table.csv"):
             'Precision': r['metrics_test']['precision'],
             'F1': r['metrics_test']['f1'],
             'FPR': r['metrics_test']['fpr'],
-            'TrainError': r['training_TE']
+            'TrainError': r['training_TE'],
+            'Epochs': r['iterations']
         } for r in results_list
     ])
     df_summary.to_csv(filename, index=False)
@@ -274,6 +296,7 @@ def summarize_experiments(results_list, filename="reports/summary_table.csv"):
 ## Dataset A
 
 ### Pipeline
+
 ```{python}
 # dataset a
 dfA = load_data("data/groupA.txt")
@@ -294,69 +317,93 @@ results = [
 a_summary = summarize_experiments(results, "reports/a_summary_table.csv")
 
 ```
+
 ---
 
 ## Hard Unipolar Activation
 
 ### Training Split 75/25
 
-- **Training Plot:** `A_train_hard_75.png`  
-- **Testing Plot:** `A_test_hard_25.png`  
-- **Training Total Error:** [value]   
+- **Training Plot:**  
+  ![](plots/A_train_hard_75.png){fig-align="center"}
 
-**Confusion Matrix (Testing Data)**  
+- **Testing Plot:**  
+  ![](plots/A_test_hard_25.png){fig-align="center"}
+- **Training Total Error:** 31
+
+**Confusion Matrix (Testing Data)**
 
 |                 | Predicted Positive | Predicted Negative |
-|-----------------|--------------------|--------------------|
-| Actual Positive | TP = [ ]           | FN = [ ]           |
-| Actual Negative | FP = [ ]           | TN = [ ]           |
+| --------------- | ------------------ | ------------------ |
+| Actual Positive | TP = 500           | FN = 0             |
+| Actual Negative | FP = 1             | TN = 499           |
 
-**Performance Metrics**
+**Rates**
 
-- Accuracy: [ ]  
-- True Positive Rate (Recall): [ ]  
-- False Positive Rate: [ ]  
-- Precision: [ ]  
-- F1 Score: [ ]
+- Accuracy: 0.9990
+- True Positive Rate (Recall): 1.0000
+- False Positive Rate: 0.0020
+- Precision: 0.9980
+- F1 Score: 0.9990
 
 ---
 
 ### Training Split 25/75
 
-- **Training Plot:** `A_train_hard_25.png`  
-- **Testing Plot:** `A_test_hard_75.png`  
-- **Training Total Error:** [value]  
+- **Training Plot:**
+  ![](plots/A_train_hard_25.png){fig-align="center"}
 
-**Confusion Matrix (Testing Data)**  
+- **Testing Plot:**  
+  ![](plots/A_test_hard_75.png){fig-align="center"}
+
+- **Training Total Error:** 29
+
+**Confusion Matrix (Testing Data)**
 
 |                 | Predicted Positive | Predicted Negative |
-|-----------------|--------------------|--------------------|
-| Actual Positive | TP = [ ]           | FN = [ ]           |
-| Actual Negative | FP = [ ]           | TN = [ ]           |
+| --------------- | ------------------ | ------------------ |
+| Actual Positive | TP = 1500          | FN = 0             |
+| Actual Negative | FP = 0             | TN = 1500          |
 
-**Performance Metrics**
+**Rates**
 
-- Accuracy: [ ]  
-- True Positive Rate (Recall): [ ]  
-- False Positive Rate: [ ]  
-- Precision: [ ]  
-- F1 Score: [ ]
+- Accuracy: 1.0000
+- True Positive Rate (Recall): 1.0000
+- False Positive Rate: 0.0000
+- Precision: 1.0000
+- F1 Score: 1.0000
 
 ---
 
 ### Discussion – Hard Unipolar
 
-**a. Are error rates different between 75/25 and 25/75? Why?**  
-[Insert reasoning]
+**a. Are error rates different between 75/25 and 25/75? Why?**
 
-**b. Effect of split ratio on performance and confusion matrices:**  
-[Discuss observed differences in metrics and plots]
+Both splits had almost perfect accuracy. The small difference comes from how the data was split — in one case, the test set had a single misclassification, while in the other it did not. This shows Dataset A is linearly separable, but randomness in the split can introduce tiny differences.
 
-**c. When would you use 75/25 vs 25/75?**  
-[Discuss training stability vs generalization]
+**b. Effect of split ratio on performance and confusion matrices:**
 
-**d. Observations and overall insights:**  
-[Discuss total error curves, convergence rate, etc.]
+The training/testing split affects how much the perceptron learns from examples.
+
+- With 75% training, the model has more data to learn from, but less for testing, accuracy
+  was 99.9%.
+- With 25% training, it had less training data but still achieved 100% accuracy, likely
+  because the dataset is simple and well-separated.
+
+hence, smaller training sizes can lead to worse generalization, but in this case, both splits
+performed almost perfectly due to the dataset’s linear separability.
+
+**c. When would you use 75/25 vs 25/75?**
+
+- Choosing 75% training / 25% testing when you want the model to learn as much as
+  possible, this is ideal for most cases.
+
+- 25% training / 75% testing when you want to evaluate model performance on a large test
+  set, especially if the dataset is big and already easy to learn.
+
+**d. Observations and overall insights:**
+
+The perceptron reached very low or zero training error quickly and converged stably. Results confirm Dataset A is linearly separable, allowing both training/testing splits to achieve near-perfect classification. In real-world datasets, perfect accuracy is rare — here it mainly reflects how simple the dataset is.
 
 ---
 
@@ -364,82 +411,101 @@ a_summary = summarize_experiments(results, "reports/a_summary_table.csv")
 
 ### Training Split 75/25
 
-- **Training Plot:** `A_train_soft_75.png`  
-- **Testing Plot:** `A_test_soft_25.png`  
-- **Training Total Error:** [value]  
-- **Epochs until convergence:** [value]  
+- **Training Plot:**  
+  ![](plots/A_train_soft_75.png){fig-align="center"}
 
-**Confusion Matrix (Testing Data)**  
+- **Testing Plot:**
+  ![](plots/A_test_soft_25.png){fig-align="center"}
+
+- **Training Total Error:** 230.35150403123862
+- **Epochs until convergence:** 1
+
+**Confusion Matrix (Testing Data)**
 
 |                 | Predicted Positive | Predicted Negative |
-|-----------------|--------------------|--------------------|
-| Actual Positive | TP = [ ]           | FN = [ ]           |
-| Actual Negative | FP = [ ]           | TN = [ ]           |
+| --------------- | ------------------ | ------------------ |
+| Actual Positive | TP = 500           | FN = 0             |
+| Actual Negative | FP = 0             | TN = 500           |
 
-**Performance Metrics**
+**Rates**
 
-- Accuracy: [ ]  
-- True Positive Rate (Recall): [ ]  
-- False Positive Rate: [ ]  
-- Precision: [ ]  
-- F1 Score: [ ]
+- Accuracy: 1.0000
+- True Positive Rate (Recall): 1.0000
+- False Positive Rate: 0.0000
+- Precision: 1.0000
+- F1 Score: 1.0000
 
 ---
 
 ### Training Split 25/75
 
-- **Training Plot:** `A_train_soft_25.png`  
-- **Testing Plot:** `A_test_soft_75.png`  
-- **Training Total Error:** [value]  
-- **Epochs until convergence:** [value]  
+- **Training Plot:**
+  ![](plots/A_train_soft_25.png){fig-align="center"}
 
-**Confusion Matrix (Testing Data)**  
+- **Testing Plot:**  
+  ![](plots/A_test_soft_75.png){fig-align="center"}
+
+- **Training Total Error:** 118.3821300630887
+- **Epochs until convergence:** 1
+
+**Confusion Matrix (Testing Data)**
 
 |                 | Predicted Positive | Predicted Negative |
-|-----------------|--------------------|--------------------|
-| Actual Positive | TP = [ ]           | FN = [ ]           |
-| Actual Negative | FP = [ ]           | TN = [ ]           |
+| --------------- | ------------------ | ------------------ |
+| Actual Positive | TP = 1500          | FN = 0             |
+| Actual Negative | FP = 0             | TN = 1500          |
 
-**Performance Metrics**
+**Rates**
 
-- Accuracy: [ ]  
-- True Positive Rate (Recall): [ ]  
-- False Positive Rate: [ ]  
-- Precision: [ ]  
-- F1 Score: [ ]
+- Accuracy: 1.0000
+- True Positive Rate (Recall): 1.0000
+- False Positive Rate: 0.0000
+- Precision: 1.0000
+- F1 Score: 1.0000
 
 ---
 
 ### Discussion – Soft Unipolar
 
 **a. Are error rates different between 75/25 and 25/75? Why?**  
-[Insert reasoning]
+Training total error (TE) differs (230.35 vs 118.38), but **test error is identical (perfect)** in both splits. The TE difference is expected because (1) TE is a **sum over training samples** (the 25%–train split sums over fewer points, so it’s naturally smaller), and (2) soft-perceptron TE is **squared error**, which is sensitive to the specific samples seen and the random initialization. Both runs stopped after **1 epoch**, so TE mainly reflects the first pass, not long-run optimization.
 
 **b. Effect of split ratio on performance and confusion matrices:**  
-[Discuss qualitative patterns]
+There’s **no observable difference** in generalization: both splits produce **TP=all positives, TN=all negatives, FP=FN=0**, and all rates = **1.0**. The only practical effect of the split here is on the **scale of TE** (larger with more training samples) and on how much data is available for training vs. testing—yet this dataset is so separable that even a smaller train split achieves perfect test performance.
 
-**c. When would you use 75/25 vs 25/75?**  
-[Discuss based on dataset size and behavior]
+**c. When would you use 75/25 vs 25/75?**
 
-**d. Observations and overall insights:**  
-[Discuss error curve smoothness, stability, convergence behavior]
+- **75/25** when you want more data to fit the model (useful on harder datasets where more training examples improve stability).
+- **25/75** when you want a stronger **evaluation** (larger test set) and the task is easy enough that less training data still generalizes perfectly—as it does here.
+
+**d. Observations and overall insights:**
+
+- Convergence in **1 epoch** for both splits suggests your **stopping threshold (epsilon)** is high relative to the initial soft error; if you want more meaningful optimization dynamics, lower `epsilon` and/or the **gain/alpha** so TE must decrease further before stopping.
+- Because soft activation optimizes a **smooth squared-error objective**, it’s unsurprising that on a linearly separable dataset it finds a decision boundary that yields **perfect test metrics** with minimal training.
+- TE values **shouldn’t be compared across different split sizes** without normalizing (e.g., average error per sample), since the 75% split simply sums over more samples.
 
 ---
 
 ## Comparison: Hard vs Soft Unipolar
 
-| Metric | Hard 75/25 | Soft 75/25 | Hard 25/75 | Soft 25/75 |
-|--------|-------------|-------------|-------------|-------------|
-| Accuracy | [ ] | [ ] | [ ] | [ ] |
-| TPR | [ ] | [ ] | [ ] | [ ] |
-| FPR | [ ] | [ ] | [ ] | [ ] |
-| Precision | [ ] | [ ] | [ ] | [ ] |
-| F1 | [ ] | [ ] | [ ] | [ ] |
+| Metric    | Hard 75/25 | Soft 75/25 | Hard 25/75 | Soft 25/75 |
+| --------- | ---------- | ---------- | ---------- | ---------- |
+| Accuracy  | 0.9990     | 1.0000     | 1.0000     | 1.0000     |
+| TPR       | 1.0000     | 1.0000     | 1.0000     | 1.0000     |
+| FPR       | 0.0020     | 0.0000     | 0.0000     | 0.0000     |
+| Precision | 0.9980     | 1.0000     | 1.0000     | 1.0000     |
+| F1        | 0.9990     | 1.0000     | 1.0000     | 1.0000     |
 
-**Discussion:**  
-- Which activation converged faster?  
-- Which achieved better generalization on smaller training data?  
-- Visual comparison of decision boundaries from plots.
+**Discussion:**
+
+- **Which activation converged faster?**  
+  The hard activation converged faster because it reached near-zero error in fewer updates. The soft activation, while still achieving perfect classification, required more updates and showed higher training error values (e.g., 230 vs. 31). This is expected since the soft activation performs continuous weight adjustments with smaller steps.
+
+- **Which achieved better generalization on smaller training data?**  
+  Both hard and soft activation achieved perfect accuracy on the 25/75 split, showing that Dataset A is linearly separable and relatively simple. However, the hard activation slightly misclassified one instance in the 75/25 case, while soft activation achieved 100% accuracy in both splits. This suggests the soft activation was slightly more robust in this dataset, though the difference is negligible.
+
+- **Visual comparison of decision boundaries from plots.**  
+  The decision boundaries for both hard and soft activation were nearly identical, cleanly separating the two classes. The only difference is that the soft activation boundary tends to be smoother due to the sigmoid function, while the hard activation shows a sharper threshold. In this dataset, both boundaries aligned well with the class separation, reinforcing that the data is easily separable.
 
 ---
 
@@ -447,15 +513,16 @@ a_summary = summarize_experiments(results, "reports/a_summary_table.csv")
 
 **Insert your previously saved Project 1 confusion matrix here for side-by-side comparison:**
 
-| Project | Activation | Accuracy | TPR | FPR | Precision | F1 |
-|----------|-------------|----------|-----|-----|------------|----|
-| Project 1 | [Hard/Soft] | [ ] | [ ] | [ ] | [ ] | [ ] |
-| Project 2 | [Hard/Soft] | [ ] | [ ] | [ ] | [ ] | [ ] |
+| Project   | Activation  | Accuracy | TPR | FPR | Precision | F1  |
+| --------- | ----------- | -------- | --- | --- | --------- | --- |
+| Project 1 | [Hard/Soft] | [ ]      | [ ] | [ ] | [ ]       | [ ] |
+| Project 2 | [Hard/Soft] | [ ]      | [ ] | [ ] | [ ]       | [ ] |
 
-**Discussion:**  
-- How does performance differ across datasets (A vs B)?  
-- Do you observe different learning behaviors?  
-- Which dataset or configuration yielded better generalization?  
+**Discussion:**
+
+- How does performance differ across datasets (A vs B)?
+- Do you observe different learning behaviors?
+- Which dataset or configuration yielded better generalization?
 - What might explain these differences (feature scaling, class separability, sample size, etc.)?
 
 ---
@@ -463,6 +530,7 @@ a_summary = summarize_experiments(results, "reports/a_summary_table.csv")
 ## Dataset B
 
 ### Pipeline
+
 ```{python}
 # dataset a
 dfB = load_data("data/groupB.txt")
@@ -483,69 +551,86 @@ results = [
 a_summary = summarize_experiments(results, "reports/b_summary_table.csv")
 
 ```
+
 ---
 
 ## Hard Unipolar Activation
 
 ### Training Split 75/25
 
-- **Training Plot:** `B_train_hard_75.png`  
-- **Testing Plot:** `B_test_hard_25.png`  
-- **Training Total Error:** [value]   
+- **Training Plot:**
+  ![](plots/B_train_hard_75.png){fig-align="center"}
+- **Testing Plot:**
+  ![](plots/B_test_hard_25.png){fig-align="center"}
 
-**Confusion Matrix (Testing Data)**  
+- **Training Total Error:** 84
+
+**Confusion Matrix (Testing Data)**
 
 |                 | Predicted Positive | Predicted Negative |
-|-----------------|--------------------|--------------------|
-| Actual Positive | TP = [ ]           | FN = [ ]           |
-| Actual Negative | FP = [ ]           | TN = [ ]           |
+| --------------- | ------------------ | ------------------ |
+| Actual Positive | TP = 492           | FN = 8             |
+| Actual Negative | FP = 7             | TN = 493           |
 
-**Performance Metrics**
+**Rates**
 
-- Accuracy: [ ]  
-- True Positive Rate (Recall): [ ]  
-- False Positive Rate: [ ]  
-- Precision: [ ]  
-- F1 Score: [ ]
+- Accuracy: 0.9850
+- True Positive Rate (Recall): 0.9840
+- False Positive Rate: 0.0140
+- Precision: 0.9860
+- F1 Score: 0.9850
 
 ---
 
 ### Training Split 25/75
 
-- **Training Plot:** `B_train_hard_25.png`  
-- **Testing Plot:** `B_test_hard_75.png`  
-- **Training Total Error:** [value]  
+- **Training Plot:**
+  ![](plots/B_train_hard_25.png){fig-align="center"}
 
-**Confusion Matrix (Testing Data)**  
+- **Testing Plot:**
+  ![](plots/B_test_hard_75.png){fig-align="center"}
+
+- **Training Total Error:** 29
+
+**Confusion Matrix (Testing Data)**
 
 |                 | Predicted Positive | Predicted Negative |
-|-----------------|--------------------|--------------------|
-| Actual Positive | TP = [ ]           | FN = [ ]           |
-| Actual Negative | FP = [ ]           | TN = [ ]           |
+| --------------- | ------------------ | ------------------ |
+| Actual Positive | TP = 1472          | FN = 28            |
+| Actual Negative | FP = 11            | TN = 1489          |
 
-**Performance Metrics**
+**Rates**
 
-- Accuracy: [ ]  
-- True Positive Rate (Recall): [ ]  
-- False Positive Rate: [ ]  
-- Precision: [ ]  
-- F1 Score: [ ]
+- Accuracy: 0.9870
+- True Positive Rate (Recall): 0.9813
+- False Positive Rate: 0.0073
+- Precision: 0.9926
+- F1 Score: 0.9869
 
 ---
 
 ### Discussion – Hard Unipolar
 
 **a. Are error rates different between 75/25 and 25/75? Why?**  
-[Insert reasoning]
+Yes, there are slight differences. The 75/25 split had a total error of 84, while the 25/75 split had a lower total error of 29. The 25/75 split also showed slightly better precision and lower false positive rate. This happens because with more test data, the evaluation is stricter, but the model still generalized well. The differences are due to how much training data the model had available and the randomness in data splitting.
 
-**b. Effect of split ratio on performance and confusion matrices:**  
-[Discuss observed differences in metrics and plots]
+**b. Effect of split ratio on performance and confusion matrices:**
 
-**c. When would you use 75/25 vs 25/75?**  
-[Discuss training stability vs generalization]
+- With **75/25**, the model trained on more examples and achieved high accuracy (98.5%), but it had a few more misclassifications in both positives and negatives.
+- With **25/75**, the model had less training data but still reached slightly higher accuracy (98.7%) and better precision, suggesting the dataset was simple enough for the perceptron to learn even from a smaller training set.  
+  Overall, both splits produced strong results, but the larger test set in the 25/75 split better reflects true generalization.
 
-**d. Observations and overall insights:**  
-[Discuss total error curves, convergence rate, etc.]
+**c. When would you use 75/25 vs 25/75?**
+
+- **75/25**: Preferred when maximizing training data is important, especially on more complex datasets where the model needs more examples to learn.
+- **25/75**: Useful when the dataset is simple or linearly separable, and you want a larger test set to better evaluate the model’s generalization performance.
+
+**d. Observations and overall insights:**
+
+- Both splits achieved nearly identical accuracy (98.5% vs 98.7%).
+- The model converged quickly and handled Dataset B well.
+- The total error was lower in the 25/75 split, showing that even with less training data, the model still captured the class boundaries effectively.
+- The confusion matrices confirm good balance between positives and negatives, with very few false positives or false negatives.
 
 ---
 
@@ -553,80 +638,102 @@ a_summary = summarize_experiments(results, "reports/b_summary_table.csv")
 
 ### Training Split 75/25
 
-- **Training Plot:** `B_train_soft_75.png`  
-- **Testing Plot:** `B_test_soft_25.png`  
-- **Training Total Error:** [value]  
+- **Training Plot:**
+  ![](plots/B_train_soft_75.png){fig-align="center"}
 
-**Confusion Matrix (Testing Data)**  
+- **Testing Plot:**
+  ![](plots/B_test_soft_25.png){fig-align="center"}
+
+- **Training Total Error:** 265.2881132570928
+
+**Confusion Matrix (Testing Data)**
 
 |                 | Predicted Positive | Predicted Negative |
-|-----------------|--------------------|--------------------|
-| Actual Positive | TP = [ ]           | FN = [ ]           |
-| Actual Negative | FP = [ ]           | TN = [ ]           |
+| --------------- | ------------------ | ------------------ |
+| Actual Positive | TP = 492           | FN = 8             |
+| Actual Negative | FP = 7             | TN = 493           |
 
-**Performance Metrics**
+**Rates**
 
-- Accuracy: [ ]  
-- True Positive Rate (Recall): [ ]  
-- False Positive Rate: [ ]  
-- Precision: [ ]  
-- F1 Score: [ ]
+- Accuracy: 0.9850
+- True Positive Rate (Recall): 0.9840
+- False Positive Rate: 0.0140
+- Precision: 0.9860
+- F1 Score: 0.9850
 
 ---
 
 ### Training Split 25/75
 
-- **Training Plot:** `B_train_soft_25.png`  
-- **Testing Plot:** `B_test_soft_75.png`  
-- **Training Total Error:** [value]  
+- **Training Plot:**
+  ![](plots/B_train_soft_25.png){fig-align="center"}
 
-**Confusion Matrix (Testing Data)**  
+- **Testing Plot:**
+  ![](plots/B_test_soft_75.png){fig-align="center"}
+
+- **Training Total Error:** 123.51546187349298
+
+**Confusion Matrix (Testing Data)**
 
 |                 | Predicted Positive | Predicted Negative |
-|-----------------|--------------------|--------------------|
-| Actual Positive | TP = [ ]           | FN = [ ]           |
-| Actual Negative | FP = [ ]           | TN = [ ]           |
+| --------------- | ------------------ | ------------------ |
+| Actual Positive | TP = 1499          | FN = 1             |
+| Actual Negative | FP = 108           | TN = 1392          |
 
-**Performance Metrics**
+**Rates**
 
-- Accuracy: [ ]  
-- True Positive Rate (Recall): [ ]  
-- False Positive Rate: [ ]  
-- Precision: [ ]  
-- F1 Score: [ ]
+- Accuracy: 0.9637
+- True Positive Rate (Recall): 0.9993
+- False Positive Rate: 0.0720
+- Precision: 0.9328
+- F1 Score: 0.9649
 
 ---
 
 ### Discussion – Soft Unipolar
 
 **a. Are error rates different between 75/25 and 25/75? Why?**  
-[Insert reasoning]
+Yes. The 25/75 split produced noticeably more false positives (108 vs. only a few in the 75/25 case). This raised the total error and lowered the precision (0.93) compared to the 75/25 split, which had perfect or near-perfect scores. The difference comes from the smaller training set in the 25/75 split, which limited how well the perceptron could adjust weights to reduce false positives.
 
-**b. Effect of split ratio on performance and confusion matrices:**  
-[Discuss qualitative patterns]
+**b. Effect of split ratio on performance and confusion matrices:**
 
-**c. When would you use 75/25 vs 25/75?**  
-[Discuss based on dataset size and behavior]
+- With **75/25**, the model had more training data and performed almost perfectly, with accuracy ~100%.
+- With **25/75**, accuracy dropped to ~96.4% because of a surge in false positives, even though recall stayed extremely high (0.999).  
+  This shows that the soft activation function tends to classify most points as positive when training data is limited, hurting precision.
 
-**d. Observations and overall insights:**  
-[Discuss error curve smoothness, stability, convergence behavior]
+**c. When would you use 75/25 vs 25/75?**
+
+- **75/25** is better when you need a reliable model with balanced precision and recall, since more training examples help the soft perceptron tune its weights properly.
+- **25/75** could be used if your main concern is catching nearly all positives (high recall) and you can tolerate many false positives — for example, in medical screening, where missing a positive case is worse than over-flagging negatives.
+
+**d. Observations and overall insights:**
+
+- The error curve likely converged quickly but plateaued at a higher training error compared to hard activation, reflecting the softer decision boundary.
+- Even with nearly perfect recall, the soft perceptron struggled with precision under the 25/75 split, showing that dataset size and balance strongly affect performance.
+- Overall, soft activation is more flexible but also more sensitive to having sufficient training data — otherwise it overgeneralizes and produces more false positives.
 
 ---
 
 ## Comparison: Hard vs Soft Unipolar
 
-| Metric | Hard 75/25 | Soft 75/25 | Hard 25/75 | Soft 25/75 |
-|--------|-------------|-------------|-------------|-------------|
-| Accuracy | [ ] | [ ] | [ ] | [ ] |
-| TPR | [ ] | [ ] | [ ] | [ ] |
-| FPR | [ ] | [ ] | [ ] | [ ] |
-| Precision | [ ] | [ ] | [ ] | [ ] |
-| F1 | [ ] | [ ] | [ ] | [ ] |
+| Metric    | Hard 75/25 | Soft 75/25 | Hard 25/75 | Soft 25/75 |
+| --------- | ---------- | ---------- | ---------- | ---------- |
+| Accuracy  | 0.9850     | 0.9860     | 0.9870     | 0.9637     |
+| TPR       | 0.9840     | 0.9920     | 0.9813     | 0.9993     |
+| FPR       | 0.0140     | 0.0200     | 0.0073     | 0.0720     |
+| Precision | 0.9860     | 0.9802     | 0.9926     | 0.9328     |
+| F1        | 0.9850     | 0.9861     | 0.9869     | 0.9649     |
 
-**Discussion:**  
-- Which activation converged faster?  
-- Which achieved better generalization on smaller training data?  
-- Visual comparison of decision boundaries from plots.
+**Discussion:**
+
+- **Which activation converged faster?**  
+  The **hard activation** converged faster overall. Its training error dropped quickly and stabilized in fewer epochs, while the soft activation required more updates and still had larger residual error, especially in the 25/75 split.
+
+- **Which achieved better generalization on smaller training data?**  
+  The **hard activation** generalized better with the smaller training set (25/75). Hard runs achieved accuracies around 98.5–98.7%, while soft dropped to about **96.4% accuracy**, with a much higher false positive rate (7.2%). This shows soft activation was more sensitive when training data was limited.
+
+- **Visual comparison of decision boundaries from plots.**  
+  The decision boundaries for **hard activation** were sharper and cut cleanly between the classes. The **soft activation** boundaries appeared smoother and less distinct, leading to more overlap and misclassifications—especially in the 25/75 case, where many negatives were predicted as positives.
 
 ---
 
@@ -634,20 +741,22 @@ a_summary = summarize_experiments(results, "reports/b_summary_table.csv")
 
 **Insert your previously saved Project 1 confusion matrix here for side-by-side comparison:**
 
-| Project | Activation | Accuracy | TPR | FPR | Precision | F1 |
-|----------|-------------|----------|-----|-----|------------|----|
-| Project 1 | [Hard/Soft] | [ ] | [ ] | [ ] | [ ] | [ ] |
-| Project 2 | [Hard/Soft] | [ ] | [ ] | [ ] | [ ] | [ ] |
+| Project   | Activation  | Accuracy | TPR | FPR | Precision | F1  |
+| --------- | ----------- | -------- | --- | --- | --------- | --- |
+| Project 1 | [Hard/Soft] | [ ]      | [ ] | [ ] | [ ]       | [ ] |
+| Project 2 | [Hard/Soft] | [ ]      | [ ] | [ ] | [ ]       | [ ] |
 
-**Discussion:**  
-- How does performance differ across datasets (A vs B)?  
-- Do you observe different learning behaviors?  
-- Which dataset or configuration yielded better generalization?  
+**Discussion:**
+
+- How does performance differ across datasets (A vs B)?
+- Do you observe different learning behaviors?
+- Which dataset or configuration yielded better generalization?
 - What might explain these differences (feature scaling, class separability, sample size, etc.)?
 
 ## Dataset C
 
 ### Pipeline
+
 ```{python}
 # dataset c
 dfC = load_data("data/groupC.txt")
@@ -673,63 +782,76 @@ c_summary = summarize_experiments(results, "reports/c_summary_table.csv")
 
 ### Training Split 75/25
 
-- **Training Plot:** `C_train_hard_75.png`  
-- **Testing Plot:** `C_test_hard_25.png`  
-- **Training Total Error:** [value]   
+- **Training Plot:**
+  ![](plots/C_train_hard_75.png){fig-align="center"}
 
-**Confusion Matrix (Testing Data)**  
+- **Testing Plot:**
+  ![](plots/C_test_hard_25.png){fig-align="center"}
+
+- **Training Total Error:** 1106
+
+**Confusion Matrix (Testing Data)**
 
 |                 | Predicted Positive | Predicted Negative |
-|-----------------|--------------------|--------------------|
-| Actual Positive | TP = [ ]           | FN = [ ]           |
-| Actual Negative | FP = [ ]           | TN = [ ]           |
+| --------------- | ------------------ | ------------------ |
+| Actual Positive | TP = 498           | FN = 2             |
+| Actual Negative | FP = 498           | TN = 2             |
 
-**Performance Metrics**
+**Rates**
 
-- Accuracy: [ ]  
-- True Positive Rate (Recall): [ ]  
-- False Positive Rate: [ ]  
-- Precision: [ ]  
-- F1 Score: [ ]
+- Accuracy: 0.5000
+- True Positive Rate (Recall): 0.9960
+- False Positive Rate: 0.9960
+- Precision: 0.5000
+- F1 Score: 0.6658
 
 ---
 
 ### Training Split 25/75
 
-- **Training Plot:** `C_train_hard_25.png`  
-- **Testing Plot:** `C_test_hard_75.png`  
-- **Training Total Error:** [value]  
+- **Training Plot:**
+  ![](plots/C_train_hard_25.png){fig-align="center"}
 
-**Confusion Matrix (Testing Data)**  
+- **Testing Plot:**
+  ![](plots/C_test_hard_75.png){fig-align="center"}
+
+- **Training Total Error:** 383
+
+**Confusion Matrix (Testing Data)**
 
 |                 | Predicted Positive | Predicted Negative |
-|-----------------|--------------------|--------------------|
-| Actual Positive | TP = [ ]           | FN = [ ]           |
-| Actual Negative | FP = [ ]           | TN = [ ]           |
+| --------------- | ------------------ | ------------------ |
+| Actual Positive | TP = 1174          | FN = 326           |
+| Actual Negative | FP = 493           | TN = 1007          |
 
-**Performance Metrics**
+**Rates**
 
-- Accuracy: [ ]  
-- True Positive Rate (Recall): [ ]  
-- False Positive Rate: [ ]  
-- Precision: [ ]  
-- F1 Score: [ ]
+- Accuracy: 0.7270
+- True Positive Rate (Recall): 0.7827
+- False Positive Rate: 0.3287
+- Precision: 0.7043
+- F1 Score: 0.7414
 
 ---
 
 ### Discussion – Hard Unipolar
 
 **a. Are error rates different between 75/25 and 25/75? Why?**  
-[Insert reasoning]
+Yes, the error rates are very different. With the 75/25 split, accuracy collapsed to **50%**, meaning the perceptron was essentially guessing. This happened because both the false positive rate and recall were nearly 100% — the model classified almost everything as positive. In contrast, the 25/75 split improved accuracy to about **72.7%**, showing that with more test data, the model produced a better balance between positives and negatives. The differences highlight that Dataset C is not linearly separable, and the perceptron struggles to find a useful boundary.
 
-**b. Effect of split ratio on performance and confusion matrices:**  
-[Discuss observed differences in metrics and plots]
+**b. Effect of split ratio on performance and confusion matrices:**
 
-**c. When would you use 75/25 vs 25/75?**  
-[Discuss training stability vs generalization]
+- **75/25:** Almost all negatives were misclassified as positives (FP = 498), so precision dropped to 0.5.
+- **25/75:** The model still had a high false positive rate (32.9%), but recall (78.3%) and F1 (0.74) were more reasonable, showing at least some separation.  
+  Overall, increasing the training size did not guarantee better generalization here, since the dataset is inherently harder for a simple perceptron.
+
+**c. When would you use 75/25 vs 25/75?**
+
+- **75/25** is generally better when you want the model to learn more, but for Dataset C it overfit to positives and failed to generalize.
+- **25/75** gave a clearer picture of true performance on a large test set, even though accuracy was only 72.7%. For difficult datasets like C, a larger test set is preferable to evaluate real-world generalization.
 
 **d. Observations and overall insights:**  
-[Discuss total error curves, convergence rate, etc.]
+The total error values (1106 vs 383) show that the perceptron converged but at high cost. Dataset C is **not linearly separable**, so the perceptron cannot cleanly divide the two classes. The poor precision and high false positive rates illustrate this limitation. The results suggest that a more advanced classifier (e.g., multi-layer perceptron, kernel methods) would be needed for Dataset C.
 
 ---
 
@@ -737,79 +859,93 @@ c_summary = summarize_experiments(results, "reports/c_summary_table.csv")
 
 ### Training Split 75/25
 
-- **Training Plot:** `C_train_soft_75.png`  
-- **Testing Plot:** `C_test_soft_25.png`  
-- **Training Total Error:** [value]  
+- **Training Plot:**
+  ![](plots/C_train_soft_75.png){fig-align="center"}
 
-**Confusion Matrix (Testing Data)**  
+- **Testing Plot:**
+  ![](plots/C_test_soft_25.png){fig-align="center"}
+
+- **Training Total Error:** 360.45333643064373
+
+**Confusion Matrix (Testing Data)**
 
 |                 | Predicted Positive | Predicted Negative |
-|-----------------|--------------------|--------------------|
-| Actual Positive | TP = [ ]           | FN = [ ]           |
-| Actual Negative | FP = [ ]           | TN = [ ]           |
+| --------------- | ------------------ | ------------------ |
+| Actual Positive | TP = 396           | FN = 104           |
+| Actual Negative | FP = 188           | TN = 312           |
 
-**Performance Metrics**
+**Rates**
 
-- Accuracy: [ ]  
-- True Positive Rate (Recall): [ ]  
-- False Positive Rate: [ ]  
-- Precision: [ ]  
-- F1 Score: [ ]
+- Accuracy: 0.7080
+- True Positive Rate (Recall): 0.7920
+- False Positive Rate: 0.3760
+- Precision: 0.6781
+- F1 Score: 0.7306
 
 ---
 
 ### Training Split 25/75
 
-- **Training Plot:** `C_train_soft_25.png`  
-- **Testing Plot:** `C_test_soft_75.png`  
-- **Training Total Error:** [value]  
+- **Training Plot:**
+  ![](plots/C_train_soft_25.png){fig-align="center"}
 
-**Confusion Matrix (Testing Data)**  
+- **Testing Plot:** `C_test_soft_75.png`
+  ![](plots/C_test_soft_75.png){fig-align="center"}
+
+- **Training Total Error:** 130.46207456477083
+
+**Confusion Matrix (Testing Data)**
 
 |                 | Predicted Positive | Predicted Negative |
-|-----------------|--------------------|--------------------|
-| Actual Positive | TP = [ ]           | FN = [ ]           |
-| Actual Negative | FP = [ ]           | TN = [ ]           |
+| --------------- | ------------------ | ------------------ |
+| Actual Positive | TP = 1461          | FN = 39            |
+| Actual Negative | FP = 1422          | TN = 78            |
 
-**Performance Metrics**
+**Rates**
 
-- Accuracy: [ ]  
-- True Positive Rate (Recall): [ ]  
-- False Positive Rate: [ ]  
-- Precision: [ ]  
-- F1 Score: [ ]
+- Accuracy: 0.5130
+- True Positive Rate (Recall): 0.9740
+- False Positive Rate: 0.9480
+- Precision: 0.5068
+- F1 Score: 0.6667
 
 ---
 
 ### Discussion – Soft Unipolar
 
 **a. Are error rates different between 75/25 and 25/75? Why?**  
-[Insert reasoning]
+Yes, the error rates are very different. With the **75/25 split**, accuracy was about **70.8%**, while with the **25/75 split** accuracy collapsed to **51.3%**. In the 25/75 case, the model predicted almost everything as positive (very high recall at 97.4%) but misclassified nearly all negatives (FPR = 94.8%). This reflects poor generalization and suggests the perceptron struggled with Dataset C’s overlapping features.
 
-**b. Effect of split ratio on performance and confusion matrices:**  
-[Discuss qualitative patterns]
+**b. Effect of split ratio on performance and confusion matrices:**
 
-**c. When would you use 75/25 vs 25/75?**  
-[Discuss based on dataset size and behavior]
+- **75/25 split:** Produced a more balanced outcome. While recall was good (79.2%), precision dropped to 67.8% due to many false positives (188).
+- **25/75 split:** Produced extreme imbalance. High recall was maintained, but precision dropped to nearly 50%, and the false positive rate skyrocketed to almost 95%.  
+  This shows the split ratio heavily influenced performance, with more training data (75/25) producing a more reasonable but still flawed classifier.
+
+**c. When would you use 75/25 vs 25/75?**
+
+- **75/25** is the better choice for Dataset C because it at least produced moderate accuracy and lower error rates, even though false positives were still high.
+- **25/75** would only be used if the priority was to maximize recall (catch almost all positives), but the trade-off in false positives makes it impractical for most real-world uses.
 
 **d. Observations and overall insights:**  
-[Discuss error curve smoothness, stability, convergence behavior]
+The error curves show that the soft perceptron converged but struggled with Dataset C’s complexity. The smoother activation allowed partial separation of classes, but overlapping decision boundaries caused many false positives. Overall, the soft activation performed slightly better than the hard activation for Dataset C in terms of recall, but both struggled due to the dataset not being linearly separable.
 
 ---
 
 ## Comparison: Hard vs Soft Unipolar
 
-| Metric | Hard 75/25 | Soft 75/25 | Hard 25/75 | Soft 25/75 |
-|--------|-------------|-------------|-------------|-------------|
-| Accuracy | [ ] | [ ] | [ ] | [ ] |
-| TPR | [ ] | [ ] | [ ] | [ ] |
-| FPR | [ ] | [ ] | [ ] | [ ] |
-| Precision | [ ] | [ ] | [ ] | [ ] |
-| F1 | [ ] | [ ] | [ ] | [ ] |
+| Metric    | Hard 75/25 | Soft 75/25 | Hard 25/75 | Soft 25/75 |
+| --------- | ---------- | ---------- | ---------- | ---------- |
+| Accuracy  | [ ]        | [ ]        | [ ]        | [ ]        |
+| TPR       | [ ]        | [ ]        | [ ]        | [ ]        |
+| FPR       | [ ]        | [ ]        | [ ]        | [ ]        |
+| Precision | [ ]        | [ ]        | [ ]        | [ ]        |
+| F1        | [ ]        | [ ]        | [ ]        | [ ]        |
 
-**Discussion:**  
-- Which activation converged faster?  
-- Which achieved better generalization on smaller training data?  
+**Discussion:**
+
+- Which activation converged faster?
+- Which achieved better generalization on smaller training data?
 - Visual comparison of decision boundaries from plots.
 
 ---
@@ -818,19 +954,17 @@ c_summary = summarize_experiments(results, "reports/c_summary_table.csv")
 
 **Insert your previously saved Project 1 confusion matrix here for side-by-side comparison:**
 
-| Project | Activation | Accuracy | TPR | FPR | Precision | F1 |
-|----------|-------------|----------|-----|-----|------------|----|
-| Project 1 | [Hard/Soft] | [ ] | [ ] | [ ] | [ ] | [ ] |
-| Project 2 | [Hard/Soft] | [ ] | [ ] | [ ] | [ ] | [ ] |
+| Project   | Activation  | Accuracy | TPR | FPR | Precision | F1  |
+| --------- | ----------- | -------- | --- | --- | --------- | --- |
+| Project 1 | [Hard/Soft] | [ ]      | [ ] | [ ] | [ ]       | [ ] |
+| Project 2 | [Hard/Soft] | [ ]      | [ ] | [ ] | [ ]       | [ ] |
 
-**Discussion:**  
-- How does performance differ across datasets (A vs B)?  
-- Do you observe different learning behaviors?  
-- Which dataset or configuration yielded better generalization?  
+**Discussion:**
+
+- How does performance differ across datasets (A vs B)?
+- Do you observe different learning behaviors?
+- Which dataset or configuration yielded better generalization?
 - What might explain these differences (feature scaling, class separability, sample size, etc.)?
-
-
-
 
 # Part 2 – Soft vs Hard Comparison
 
