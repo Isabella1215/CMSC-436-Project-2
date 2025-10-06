@@ -178,7 +178,7 @@ _(Same structure as Dataset A and B)_
 
 # Extra Credit
 
-- Placeholder text.
+- When working with a dataset, I’d start by splitting it into training and testing sets—usually about 70–80% for training and 20–30% for testing—so the model has enough data to learn from while still leaving some for evaluation. I’d make sure the split keeps the same balance of classes or categories in both sets, so the model doesn’t end up learning mostly from one type of data. This kind of proportional sampling helps it generalize better and avoids bias. I’d also use cross-validation to check that the model performs consistently across different splits, making sure it’s learning real patterns rather than just memorizing examples.
 
 ---
 
