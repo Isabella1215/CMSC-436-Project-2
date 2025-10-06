@@ -1,4 +1,4 @@
-### Dataset A â€“ Soft Activation (75/25 Split)
+### Dataset A – Soft Activation (75/25 Split)
 
 **Confusion Matrix (Testing Data)**
 
@@ -15,4 +15,4 @@
 - Precision: 1.0000
 - F1 Score: 1.0000
 
-_Generated on 2025-10-06 09:07:59_
+_Generated on 2025-10-06 15:56:58_
