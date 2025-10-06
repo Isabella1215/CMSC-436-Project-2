@@ -1,0 +1,18 @@
+### Dataset C – Soft Activation (75/25 Split)
+
+**Confusion Matrix (Testing Data)**
+
+|                 | Predicted Positive | Predicted Negative |
+| --------------- | ------------------ | ------------------ |
+| Actual Positive | TP = 396 | FN = 104 |
+| Actual Negative | FP = 188 | TN = 312 |
+
+**Rates**
+
+- Accuracy: 0.7080
+- True Positive Rate (Recall): 0.7920
+- False Positive Rate: 0.3760
+- Precision: 0.6781
+- F1 Score: 0.7306
+
+_Generated on 2025-10-06 09:08:18_

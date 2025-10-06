@@ -1,0 +1,18 @@
+### Dataset B – Hard Activation (75/25 Split)
+
+**Confusion Matrix (Testing Data)**
+
+|                 | Predicted Positive | Predicted Negative |
+| --------------- | ------------------ | ------------------ |
+| Actual Positive | TP = 492 | FN = 8 |
+| Actual Negative | FP = 7 | TN = 493 |
+
+**Rates**
+
+- Accuracy: 0.9850
+- True Positive Rate (Recall): 0.9840
+- False Positive Rate: 0.0140
+- Precision: 0.9860
+- F1 Score: 0.9850
+
+_Generated on 2025-10-06 09:08:00_
