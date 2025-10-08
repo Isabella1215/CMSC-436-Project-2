@@ -511,19 +511,19 @@ There’s **no observable difference** in generalization: both splits produce **
 
 ## Comparison to Project 1 Results
 
-**Insert your previously saved Project 1 confusion matrix here for side-by-side comparison:**
+| Project   | Activation | Accuracy | TPR   | FPR   | Precision | F1    |
+| --------- | ---------- | -------- | ----- | ----- | --------- | ----- |
+| Project 1 | Hard/Soft  | 1.0000   | 1.000 | 0.000 | 1.0000    | 1.000 |
+| Project 2 | Hard 75/25 | 0.9990   | 1.000 | 0.002 | 0.9980    | 0.999 |
+| Project 2 | Hard 25/75 | 1.0000   | 1.000 | 0.000 | 1.0000    | 1.000 |
+| Project 2 | Soft 75/25 | 1.0000   | 1.000 | 0.000 | 1.0000    | 1.000 |
+| Project 2 | Soft 25/75 | 1.0000   | 1.000 | 0.000 | 1.0000    | 1.000 |
 
-| Project   | Activation  | Accuracy | TPR | FPR | Precision | F1  |
-| --------- | ----------- | -------- | --- | --- | --------- | --- |
-| Project 1 | [Hard/Soft] | [ ]      | [ ] | [ ] | [ ]       | [ ] |
-| Project 2 | [Hard/Soft] | [ ]      | [ ] | [ ] | [ ]       | [ ] |
+
 
 **Discussion:**
 
-- How does performance differ across datasets (A vs B)?
-- Do you observe different learning behaviors?
-- Which dataset or configuration yielded better generalization?
-- What might explain these differences (feature scaling, class separability, sample size, etc.)?
+Dataset A was perfectly separable in both projects. Project 1 achieved 100% accuracy with a manual separator, and Project 2 confirmed this with perceptron training. Both hard and soft activation converged to perfect or near-perfect classification, regardless of the split ratio.
 
 ---
 
@@ -739,19 +739,18 @@ Yes. The 25/75 split produced noticeably more false positives (108 vs. only a fe
 
 ## Comparison to Project 1 Results
 
-**Insert your previously saved Project 1 confusion matrix here for side-by-side comparison:**
+| Project   | Activation | Accuracy | TPR   | FPR   | Precision | F1    |
+| --------- | ---------- | -------- | ----- | ----- | --------- | ----- |
+| Project 1 | Hard/Soft  | 0.9870   | 0.991 | 0.016 | 0.9840    | 0.987 |
+| Project 2 | Hard 75/25 | 0.9850   | 0.984 | 0.014 | 0.9860    | 0.985 |
+| Project 2 | Hard 25/75 | 0.9870   | 0.981 | 0.007 | 0.9926    | 0.987 |
+| Project 2 | Soft 75/25 | 0.9860   | 0.992 | 0.020 | 0.9802    | 0.986 |
+| Project 2 | Soft 25/75 | 0.9637   | 0.999 | 0.072 | 0.9328    | 0.965 |
 
-| Project   | Activation  | Accuracy | TPR | FPR | Precision | F1  |
-| --------- | ----------- | -------- | --- | --- | --------- | --- |
-| Project 1 | [Hard/Soft] | [ ]      | [ ] | [ ] | [ ]       | [ ] |
-| Project 2 | [Hard/Soft] | [ ]      | [ ] | [ ] | [ ]       | [ ] |
 
 **Discussion:**
 
-- How does performance differ across datasets (A vs B)?
-- Do you observe different learning behaviors?
-- Which dataset or configuration yielded better generalization?
-- What might explain these differences (feature scaling, class separability, sample size, etc.)?
+Dataset B showed moderate overlap between classes. In Project 1, accuracy was ~0.987, with a small number of false positives/negatives. In Project 2, hard activation was consistent with Project 1, while soft activation gave slightly less stable results. Especially in the 25/75 split, soft activation dropped to 0.9637 accuracy due to a high false positive rate. This highlights that Dataset B is only partially separable and that training/test splits strongly influence performance.
 
 ## Dataset C
 
@@ -936,35 +935,42 @@ The error curves show that the soft perceptron converged but struggled with Data
 
 | Metric    | Hard 75/25 | Soft 75/25 | Hard 25/75 | Soft 25/75 |
 | --------- | ---------- | ---------- | ---------- | ---------- |
-| Accuracy  | [ ]        | [ ]        | [ ]        | [ ]        |
-| TPR       | [ ]        | [ ]        | [ ]        | [ ]        |
-| FPR       | [ ]        | [ ]        | [ ]        | [ ]        |
-| Precision | [ ]        | [ ]        | [ ]        | [ ]        |
-| F1        | [ ]        | [ ]        | [ ]        | [ ]        |
+| Accuracy  | 0.5000     | 0.7080     | 0.7270     | 0.5130     |
+| TPR       | 0.9960     | 0.7920     | 0.7827     | 0.9740     |
+| FPR       | 0.9960     | 0.3760     | 0.3287     | 0.9480     |
+| Precision | 0.5000     | 0.6781     | 0.7043     | 0.5068     |
+| F1        | 0.6658     | 0.7306     | 0.7414     | 0.6667     |
+
 
 **Discussion:**
 
-- Which activation converged faster?
-- Which achieved better generalization on smaller training data?
-- Visual comparison of decision boundaries from plots.
+**Discussion:**
+
+- **Which activation converged faster?**  
+  The **hard activation** converged faster overall. In both splits, its training error dropped more sharply and stabilized earlier, whereas the soft activation required more updates and still showed higher residual error, particularly in the 25/75 split.
+
+- **Which achieved better generalization on smaller training data?**  
+  The **hard activation** achieved better generalization with the smaller training set (25/75). It reached about **72.7% accuracy** with an F1 of 0.7414, while soft activation dropped to just **51.3% accuracy** with a very high false positive rate (94.8%). This shows the soft model was highly unstable when trained on fewer samples.
+
+- **Visual comparison of decision boundaries from plots.**  
+  The **hard activation** produced rigid and extreme boundaries, often classifying almost all points as positive in the 75/25 split, which caused poor balance between recall and precision. The **soft activation** generated smoother boundaries, but this led to significant overlap and many misclassifications, especially in the 25/75 split where negatives were almost entirely misclassified as positives.
 
 ---
 
 ## Comparison to Project 1 Results
 
-**Insert your previously saved Project 1 confusion matrix here for side-by-side comparison:**
+| Project   | Activation | Accuracy | TPR   | FPR   | Precision | F1    |
+| --------- | ---------- | -------- | ----- | ----- | --------- | ----- |
+| Project 1 | Hard/Soft  | 0.7250   | 0.739 | 0.289 | 0.7110    | 0.725 |
+| Project 2 | Hard 75/25 | 0.5000   | 0.996 | 0.996 | 0.5000    | 0.666 |
+| Project 2 | Hard 25/75 | 0.7270   | 0.783 | 0.329 | 0.7043    | 0.741 |
+| Project 2 | Soft 75/25 | 0.7080   | 0.792 | 0.376 | 0.6781    | 0.731 |
+| Project 2 | Soft 25/75 | 0.5130   | 0.974 | 0.948 | 0.5068    | 0.667 |
 
-| Project   | Activation  | Accuracy | TPR | FPR | Precision | F1  |
-| --------- | ----------- | -------- | --- | --- | --------- | --- |
-| Project 1 | [Hard/Soft] | [ ]      | [ ] | [ ] | [ ]       | [ ] |
-| Project 2 | [Hard/Soft] | [ ]      | [ ] | [ ] | [ ]       | [ ] |
 
 **Discussion:**
 
-- How does performance differ across datasets (A vs B)?
-- Do you observe different learning behaviors?
-- Which dataset or configuration yielded better generalization?
-- What might explain these differences (feature scaling, class separability, sample size, etc.)?
+Dataset C was the hardest in both projects. Project 1 achieved ~72.5% accuracy with many false positives and negatives. In Project 2, results varied more: the 25/75 split with hard activation matched Project 1 (0.727), but the 75/25 split collapsed to 0.500 accuracy, essentially random guessing due to extreme misclassifications. Soft activation also struggled, with very high false positive rates (up to 0.948). Overall, both projects confirm Dataset C is not linearly separable — perceptrons cannot handle its complexity.
 
 # Part 2 – Soft vs Hard Comparison
 
